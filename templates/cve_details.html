@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CVE Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        h3 {
+            margin-top: 30px;
+            color: #333;
+        }
+        p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .cve-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .cve-table th, .cve-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .cve-table th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .cve-table th, .cve-table td {
+                padding: 12px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ cve.id }}</h1>
+        <h3>Description</h3>
+        <p>{{ cve.descriptions }}</p>
+        <h3>CVSS V2 METRICS</h3>
+        <p><b>Severity: </b>{{ cve.severity }}</p>
+        <p><b>Vector String: </b>{{ cve.vectorString }}</p>
+        <p><b>Score: </b>{{ cve.baseScore }}</p>
+
+        <table class="cve-table">
+            <thead>
+                <tr>
+                    <th>Access Vector</th>
+                    <th>Access Complexity</th>
+                    <th>Authentication</th>
+                    <th>Confidentiality Impact</th>
+                    <th>Integrity Impact</th>
+                    <th>Availability Impact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ cve.accessVector }}</td>
+                    <td>{{ cve.accessComplexity }}</td>
+                    <td>{{ cve.authentication }}</td>
+                    <td>{{ cve.confidentialityImpact }}</td>
+                    <td>{{ cve.integrityImpact }}</td>
+                    <td>{{ cve.availabilityImpact }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Scores:</h3>
+        <p>Exploitability Score: {{ cve.exploitabilityScore }}</p>
+        <p>Impact Score: {{ cve.impactScore }}</p>
+        <h3>CPE:</h3>
+        <table class="cve-table">
+            <thead>
+                <tr>
+                    <th>Criteria</th>
+                    <th>Match Criteria ID</th>
+                    <th>Vulnerable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cpe_item in cve.cpe %}
+                <tr>
+                    <td>{{ cpe_item.criteria }}</td>
+                    <td>{{ cpe_item.matchCriteriaId }}</td>
+                    <td>{{ cpe_item.vulnerable }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
