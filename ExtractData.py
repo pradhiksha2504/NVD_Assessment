@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import pymongo
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
-db = client["api"]
+db = client["nvd_data"]
 collection = db["cves"]
 
 app = Flask(__name__)
@@ -16,8 +16,11 @@ def index():
     total_count = collection.count_documents({})
     data = list(collection.find().skip((page - 1) * per_page).limit(per_page))
     cve_list = []
+    index= (page-1)*per_page
     for document in data:
+        index +=1
         cve_list.append({
+            "Sno":index,
             "id": document["id"],
             "sourceIdentifier": document["sourceIdentifier"],
             "published": document["published"],
