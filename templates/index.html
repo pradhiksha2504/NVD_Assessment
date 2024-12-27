@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CVE List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .cve-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .cve-table th, .cve-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .cve-table th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        .cve-table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .cve-table a:hover {
+            text-decoration: underline;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .pagination a {
+            color: #007bff;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .pagination a:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        .per-page-options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .per-page-options a {
+            color: #007bff;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .per-page-options a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .per-page-options a:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .cve-table th, .cve-table td {
+                padding: 12px;
+            }
+            .pagination-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .pagination {
+                margin-top: 20px;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>CVE LIST</h1>
+        <div class="pagination-container">
+            <p>Total number of data: {{ total_count }}</p>
+            <div class="pagination">
+                {% if page > 1 %}
+                <a href="{{ url_for('index', page=page-1, per_page=per_page) }}">&laquo; Previous</a>
+                {% endif %}
+                <span>Page {{ page }}</span>
+                {% if page < (total_count // per_page) + 1 %}
+                <a href="{{ url_for('index', page=page+1, per_page=per_page) }}">Next &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="per-page-options">
+            {% for option in per_page_options %}
+            {% if option == per_page %}
+            <a href="{{ url_for('index', page=1, per_page=option) }}" class="active">{{ option }}</a>
+            {% else %}
+            <a href="{{ url_for('index', page=1, per_page=option) }}">{{ option }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <table class="cve-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Identifier</th>
+                    <th>Published Date</th>
+                    <th>Last Modified Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cve in cve_list %}
+                <tr>
+                    <td><a href="{{ url_for('cve_details', cve_id=cve.id) }}">{{ cve.id }}</a></td>
+                    <td>{{ cve.sourceIdentifier }}</td>
+                    <td>{{ cve.published }}</td>
+                    <td>{{ cve.lastModified }}</td>
+                    <td>{{ cve.vulnStatus }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
